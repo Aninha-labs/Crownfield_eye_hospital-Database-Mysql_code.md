@@ -48,13 +48,13 @@ This repository contains a MySQL relational database prototype that replaces tho
 2. Open MySQL Workbench and connect to your local server as `root`.
 3. Run the files **in this exact order**:
 
-| Order | File | Notes |
+| Part | File | Notes |
 |---|---|---|
-| 1 | `01_schema.sql` | **Warning:** starts with `DROP DATABASE IF EXISTS crownfield_eye`, so it deletes any existing database with that name |
-| 2 | `02_individual_queries.sql` | Read-only queries (plus the controlled UPDATE test) |
-| 3 | `03_procedure_and_trigger.sql` | Uses `DELIMITER $$`; run the whole file |
-| 4 | `04_security.sql` | Needs admin rights. Safe to re-run (see note below) |
-| 5 | `06_transactions.sql` | Run the statements block by block to see each result |
+| A | `01_schema.sql` | **Warning:** starts with `DROP DATABASE IF EXISTS crownfield_eye`, so it deletes any existing database with that name |
+| B | `02_individual_queries.sql` | Read-only queries (plus the controlled UPDATE test) |
+| C | `03_procedure_and_trigger.sql` | Uses `DELIMITER $$`; run the whole file |
+|D1 | `04_security.sql` | Needs admin rights. Safe to re-run (see note below) |
+|D2 | `06_transactions.sql` | Run the statements block by block to see each result |
 
 In Workbench: **File > Open SQL Script**, then click the lightning-bolt button to run the file.
 
