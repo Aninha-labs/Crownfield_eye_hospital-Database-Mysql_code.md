@@ -44,7 +44,7 @@ This repository contains a MySQL relational database prototype that replaces tho
 
 ### Steps
 
-1. Clone or download this repository.
+1. Download the repository as a ZIP file (green **Code** button > **Download ZIP**) and extract it..
 2. Open MySQL Workbench and connect to your local server as `root`.
 3. Run the files **in this exact order**:
 
