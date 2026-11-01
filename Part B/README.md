@@ -12,16 +12,10 @@ Implementation of the approved logical schema (Part A) as a working **MySQL** da
 ## 📑 Table of Contents
  
 1. [Deliverables](#-deliverables)
-2. [Repository Structure](#-repository-structure)
-3. [ER Diagram](#-er-diagram)
-4. [Physical Design Decisions](#-physical-design-decisions)
-5. [How to Run](#-how-to-run)
-6. [Shared Schema (DDL)](#-shared-schema-ddl)
-7. [ALTER TABLE Statements](#-alter-table-statements)
-8. [Data Population](#-data-population)
-9. [Controlled UPDATE and DELETE](#-controlled-update-and-delete)
-10. [Test Log](#-test-log)
-11. [Execution Evidence](#-execution-evidence)
+2. [Physical Design Decisions](#-physical-design-decisions)
+3. [How to Run](#-how-to-run)
+4. [Shared Schema (DDL)](#-shared-schema-ddl)
+5. [Data Population](#-data-population)
 ---
  
 ## ✅ Deliverables
@@ -37,11 +31,6 @@ Implementation of the approved logical schema (Part A) as a working **MySQL** da
 | Short test log | [Test Log](#-test-log) |
  
 ---
----
- 
-## 🗺️ ER Diagram
- 
-![ER Diagram](docs/DIAGRAM_DATABASE.png)
  
 ---
  
@@ -453,74 +442,3 @@ UNION ALL SELECT 'follow_up_plan', COUNT(*) FROM follow_up_plan;
  
 ---
  
-### DELETE 3 – Blocked deletes (`ON DELETE RESTRICT`)
- 
-These statements are rejected because other records still depend on them.
- 
-```sql
-DELETE FROM Patient  WHERE patient_id = 'OP001';   -- ERROR 1451: patient has appointments
-DELETE FROM medicine WHERE medicine_id = 1;        -- ERROR 1451: used in prescription_item
-DELETE FROM specialty WHERE specialty_id = 1;      -- ERROR 1451: used by Clinician
-```
- 
----
- 
-## 📋 Test Log
- 
-Run the statements in `tests.sql` and record the actual result in the last column.
- 
-### A. Structure and data
- 
-| ID | Test | SQL | Expected result | Result |
-|----|------|-----|-----------------|--------|
-| T01 | Database created | `SHOW DATABASES LIKE 'crownfield_eye';` | 1 row | ⬜ |
-| T02 | All tables created | `SHOW TABLES;` | 11 tables | ⬜ |
-| T03 | Data loaded | Row count check above | Counts match the table above (all ≥ 10 for main tables) | ⬜ |
-| T04 | ALTER TABLE applied | `SHOW INDEX FROM Appointment;` | `idx_appt_date` listed | ⬜ |
- 
-### B. Constraint tests (each statement should fail)
- 
-| ID | Constraint | SQL | Expected error |
-|----|------------|-----|----------------|
-| T05 | PRIMARY KEY | `INSERT INTO Patient VALUES ('OP001','Test','User','N1 1AA','1990-01-01',NULL);` | ERROR 1062 Duplicate entry |
-| T06 | FOREIGN KEY | `INSERT INTO Appointment (patient_id, clinician_id, clinic_id, appointment_date, appointment_time) VALUES ('ZZ999',1,1,'2026-12-01','10:00:00');` | ERROR 1452 Cannot add or update a child row |
-| T07 | UNIQUE (double booking) | `INSERT INTO Appointment (patient_id, clinician_id, clinic_id, appointment_date, appointment_time) VALUES ('OP003',1,1,'2026-10-05','09:00:00');` | ERROR 1062 (`uq_clinician_slot`) |
-| T08 | CHECK (date) | `INSERT INTO Appointment (patient_id, clinician_id, clinic_id, appointment_date, appointment_time) VALUES ('OP003',1,1,'2019-12-31','09:00:00');` | ERROR 3819 (`chk_future_or_valid_date`) |
-| T09 | CHECK (duration) | `INSERT INTO prescription_item VALUES (1,3,'1 drop','Topical (eye)','Daily',0);` | ERROR 3819 (`chk_pi_duration`) |
-| T10 | NOT NULL | `INSERT INTO Patient VALUES ('OP099','Test',NULL,'N1 1AA','1990-01-01',NULL);` | ERROR 1048 Column 'last_name' cannot be null |
-| T11 | ENUM | `INSERT INTO Appointment (patient_id, clinician_id, clinic_id, appointment_date, appointment_time, status) VALUES ('OP003',3,1,'2026-12-01','10:00:00','Done');` | ERROR 1265 Data truncated for column 'status' |
-| T12 | CHECK added by ALTER | `UPDATE Patient SET date_of_birth = '1800-01-01' WHERE patient_id = 'OP001';` | ERROR 3819 (`chk_patient_dob`) |
- 
-Record the actual result of T05 to T12 here: ⬜
- 
-### C. DEFAULT value
- 
-| ID | Test | SQL | Expected result | Result |
-|----|------|-----|-----------------|--------|
-| T13 | Default status | See below | `status = 'Scheduled'` | ⬜ |
- 
-```sql
-START TRANSACTION;
-INSERT INTO Appointment (patient_id, clinician_id, clinic_id, appointment_date, appointment_time)
-VALUES ('OP003', 3, 1, '2026-12-01', '10:00:00');
-SELECT appointment_id, status FROM Appointment WHERE appointment_date = '2026-12-01';
-ROLLBACK;
-```
- 
-### D. UPDATE and DELETE
- 
-| ID | Test | Expected result | Result |
-|----|------|-----------------|--------|
-| T14 | UPDATE 1: follow-up completed | 1 row affected; status = Completed | ⬜ |
-| T15 | UPDATE 2: reschedule appointment 3 | 1 row affected; date = 2026-11-23 | ⬜ |
-| T16 | UPDATE with invalid FK: `UPDATE Appointment SET clinic_id = 99 WHERE appointment_id = 1;` | ERROR 1452 | ⬜ |
-| T17 | DELETE 1: cancelled appointment 12 | 1 row affected; OP011, clinician 10 and clinic 10 still exist | ⬜ |
-| T18 | DELETE 2: cascade on appointment 14 | Before: 2, 1, 1. After: 0, 0, 0. After ROLLBACK: 2, 1, 1 | ⬜ |
-| T19 | DELETE 3: delete patient OP001 | ERROR 1451 | ⬜ |
-| T20 | DELETE 3: delete medicine 1 | ERROR 1451 | ⬜ |
-| T21 | DELETE 3: delete specialty 1 | ERROR 1451 | ⬜ |
- 
---- 
----
- 
-
