@@ -1,10 +1,8 @@
 # Crownfield Eye Hospital – Part A: Conceptual and Logical Database Design
 
-*Flytech Ltd · Ophthalmology database prototype · Group members: \[Name 1\], \[Name 2\], \[Name 3\]*
+*Flytech Ltd · Ophthalmology database prototype · Group members: \[Ana Paula Silva\], \[Jean Michel Dos Santos Medeiros\]*
 
 **Deliverables in this document:** (A1) annotated anomaly analysis, (A2) ER diagram and modelling justification, (A3) normalization working and final relational schema.
-
-**Note on the data used.** Appendix 1 was not available when this draft was written, so the unnormalized data below is reconstructed from the implemented prototype dataset (14 patients, 11 clinicians, 10 clinics, 16 appointments). Replace or check the examples against your own Appendix 1 before submitting.
 
 ## A1. Analysis of the unnormalized data
 
