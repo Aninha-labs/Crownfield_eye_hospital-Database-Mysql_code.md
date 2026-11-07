@@ -1,6 +1,6 @@
 # Crownfield Eye Hospital – Part A: Conceptual and Logical Database Design
 
-*Flytech Ltd · Ophthalmology database prototype · Group members: \[Ana Paula Silva\], \[Jean Michel Dos Santos Medeiros\]*
+*Flytech Ltd · Ophthalmology database prototype · Group members: \[Ana Paula Silva\] and \[Jean Michel Dos Santos Medeiros\]*
 
 **Deliverables in this document:** (A1) annotated anomaly analysis, (A2) ER diagram and modelling justification, (A3) normalization working and final relational schema.
 
