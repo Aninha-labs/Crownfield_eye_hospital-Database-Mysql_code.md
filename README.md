@@ -3,7 +3,7 @@
 **Module:** CPU4:103 Introduction to Database (Level 4)
 **Student:** Ana Paula Silva (G1433759)
 
-> This is a **fictional teaching scenario**. All patients, clinicians and records are synthetic and do not describe any real hospital system.
+> This is a **fictional teaching scenario**. All patients, clinicians and records are fictional and do not describe any real hospital system.
 
 ---
 
