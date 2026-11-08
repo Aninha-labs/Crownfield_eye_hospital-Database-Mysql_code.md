@@ -53,8 +53,8 @@ This repository contains a MySQL relational database prototype that replaces tho
 | A | `01_schema.sql` | **Warning:** starts with `DROP DATABASE IF EXISTS crownfield_eye`, so it deletes any existing database with that name |
 | B | `02_individual_queries.sql` | Read-only queries (plus the controlled UPDATE test) |
 | C | `03_procedure_and_trigger.sql` | Uses `DELIMITER $$`; run the whole file |
-|D1 | `04_security.sql` | Needs admin rights. Safe to re-run (see note below) |
-|D2 | `06_transactions.sql` | Run the statements block by block to see each result |
+| D | `04_security.sql` | Needs admin rights. Safe to re-run (see note below) |
+| D | `06_transactions.sql` | Run the statements block by block to see each result |
 
 In Workbench: **File > Open SQL Script**, then click the lightning-bolt button to run the file.
 
